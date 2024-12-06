@@ -1,0 +1,77 @@
+---
+- name: Windows Server 2022 Hardening
+  hosts: windows
+  become: yes
+  tasks:
+
+    - name: Ensure Windows is up to date
+      win_updates:
+        category_names:
+          - CriticalUpdates
+          - SecurityUpdates
+        reboot: yes
+
+    - name: Allow RDP through the firewall
+      win_firewall_rule:
+        name: "AllowRDP"
+        localport: 3389
+        protocol: TCP
+        action: allow
+        direction: in
+        enabled: yes
+
+    - name: Disable SMBv1
+      win_feature:
+        name: FS-SMB1
+        state: absent
+
+    - name: Enable SMBv2 and SMBv3
+      win_feature:
+        name: FS-SMB2
+        state: present
+
+    - name: Enable auditing of logon events
+      win_audit_policy:
+        name: "Logon/Logoff"
+        subcategory: "Logon"
+        audit_flag: Success,Failure
+
+    - name: Enable auditing of account management
+      win_audit_policy:
+        name: "Account Management"
+        subcategory: "User Account Management"
+        audit_flag: Success,Failure
+
+    - name: Ensure Windows Defender Antivirus is enabled
+      win_feature:
+        name: Windows-Defender-Features
+        state: present
+
+    - name: Configure Windows Defender Antivirus to update daily
+      win_scheduled_task:
+        name: "DefenderUpdate"
+        description: "Update Windows Defender Antivirus daily"
+        actions:
+          - path: "%ProgramFiles%/Windows Defender/MpCmdRun.exe"
+            arguments: "-SignatureUpdate"
+        triggers:
+          - type: daily
+            start_boundary: "2023-01-01T02:00:00"
+        state: present
+
+    - name: Enable Windows Update automatic updates
+      win_service:
+        name: wuauserv
+        start_mode: auto
+        state: started
+
+    - name: Disable LM and NTLMv1
+      win_regedit:
+        path: HKLM:\SYSTEM\CurrentControlSet\Control\Lsa
+        name: "LmCompatibilityLevel"
+        data: 5
+        type: dword
+
+    - name: Ensure PowerShell script execution policy is restricted
+      win_shell: Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope LocalMachine
+

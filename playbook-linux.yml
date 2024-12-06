@@ -1,0 +1,44 @@
+---
+- name: Update system packages
+  hosts: linux
+  become: yes
+  #become_user: cyril
+  tasks:
+    - name: Update package cache
+      apt:
+        update_cache: yes
+        state: present
+
+    - name: Upgrade system packages
+      apt:
+        upgrade: yes
+        state: latest
+
+    - name: Ensure UFW is installed
+      apt:
+        name: ufw
+        state: present
+
+    - name: Disable root login
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^PermitRootLogin'
+        line: 'PermitRootLogin no'
+        create: yes
+
+    - name: Ensure SELinux is installed and enabled
+      apt:
+        name: selinux-basics
+        state: present
+
+    - name: Apply SELinux configuration
+      command: selinux-activate
+      args:
+        creates: /etc/selinux/config
+  
+    - name: Set SSH idle timeout interval
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^ClientAliveInterval'
+        line: 'ClientAliveInterval 300'
+      notify: Restart SSH
