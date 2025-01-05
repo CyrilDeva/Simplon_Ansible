@@ -30,18 +30,6 @@
         name: FS-SMB2
         state: present
 
-    - name: Enable auditing of logon events
-      win_audit_policy:
-        name: "Logon/Logoff"
-        subcategory: "Logon"
-        audit_flag: Success,Failure
-
-    - name: Enable auditing of account management
-      win_audit_policy:
-        name: "Account Management"
-        subcategory: "User Account Management"
-        audit_flag: Success,Failure
-
     - name: Ensure Windows Defender Antivirus is enabled
       win_feature:
         name: Windows-Defender-Features
