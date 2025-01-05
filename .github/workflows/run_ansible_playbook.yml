@@ -3,7 +3,7 @@ name: Run Ansible Playbook
 on:
   push:
     paths:
-      - 'playbook-linux.yml'
+      - 'Ansible/playbook-linux.yml'
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -22,5 +22,5 @@ jobs:
 
       - name: Run Ansible Playbook
         run: |
-          ansible-playbook playbook-linux.yml -i hosts
-          playbook-windows.yml -i hosts
+          Ansible/ansible-playbook playbook-linux.yml -i Ansible/hosts
+          Ansible/playbook-windows.yml -i Ansible/hosts
