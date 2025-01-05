@@ -4,8 +4,6 @@ on:
   push:
     paths:
       - 'Ansible/playbook-linux.yml'
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
 
 jobs:
   run-playbook:
