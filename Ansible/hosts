@@ -1,13 +1,5 @@
-targets:
+all:
   hosts:
-    linux:
-      ansible_host: 10.0.0.7
-      ansible_user: cyril
-      ansible_password: Simplon-2023
-    windows:
-      ansible_host: WIN-AD
-      ansible_user: administrator
-      ansible_password: Simplon-2023
-      ansible_connection: winrm
-      ansible_port: 5985
-      ansible_winrm_transport: kerberos
+    localhost:
+      ansible_host: 127.0.0.1
+      ansible_connection: local
