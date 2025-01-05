@@ -22,5 +22,5 @@ jobs:
 
       - name: Run Ansible Playbook
         run: |
-          Ansible/ansible-playbook playbook-linux.yml -i Ansible/hosts
-          Ansible/playbook-windows.yml -i Ansible/hosts
+          ansible-playbook Ansible/playbook-linux.yml -i Ansible/hosts
+          ansible-playbook Ansible/playbook-windows.yml -i Ansible/hosts
