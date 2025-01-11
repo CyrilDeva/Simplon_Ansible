@@ -38,6 +38,9 @@ Le Playbook pour Linux effectue des tâches de maintenance et de durcissement du
 -   Configuration de SELinux.
 -   Ajout d'un délai d'inactivité pour SSH.
 
+Syntaxe des playbooks : https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_intro.html#playbook-syntax
+
+
 ```
 ---
 - name: Update system packages
